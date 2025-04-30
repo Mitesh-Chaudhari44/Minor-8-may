@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - News Portal</title>
+    <link rel="stylesheet" href="../assets/css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-image">
+                <img src="../assets/images/default-avatar.png" alt="Profile Image" id="profileImage">
+                <button class="edit-image-btn" onclick="openImageUpload()">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
+            <h1 id="userName">Loading...</h1>
+            <p id="userEmail">Loading...</p>
+        </div>
+
+        <div class="profile-details">
+            <div class="detail-card">
+                <div class="card-header">
+                    <h3>Personal Information</h3>
+                    <button class="edit-info-btn" onclick="editPersonalInfo()">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                <div class="detail-item">
+                    <label>Name:</label>
+                    <span id="displayName">Loading...</span>
+                </div>
+                <div class="detail-item">
+                    <label>Email:</label>
+                    <span id="displayEmail">Loading...</span>
+                </div>
+                <div class="detail-item">
+                    <label>Member Since:</label>
+                    <span id="memberSince">Loading...</span>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <div class="card-header">
+                    <h3>News Preferences</h3>
+                    <button class="edit-pref-btn" onclick="openPreferencesModal()">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                <div class="preferences-list" id="preferencesList">
+                    <!-- Preferences will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </button>
+            <button class="change-password-btn" onclick="changePassword()">
+                <i class="fas fa-key"></i> Change Password
+            </button>
+        </div>
+    </div>
+
+    <!-- News Preferences Modal -->
+    <div id="preferencesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit News Preferences</h2>
+                <button class="close-modal" onclick="closePreferencesModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="preferencesForm">
+                    <div class="preferences-grid">
+                        <div class="preference-category">
+                            <h4>Sports</h4>
+                            <div class="preference-options">
+                                <label class="preference-option">
+                                    <input type="checkbox" name="sports" value="cricket"> Cricket
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="sports" value="football"> Football
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="sports" value="basketball"> Basketball
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="preference-category">
+                            <h4>Technology</h4>
+                            <div class="preference-options">
+                                <label class="preference-option">
+                                    <input type="checkbox" name="tech" value="ai"> AI
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="tech" value="gadgets"> Gadgets
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="tech" value="software"> Software
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="preference-category">
+                            <h4>Health</h4>
+                            <div class="preference-options">
+                                <label class="preference-option">
+                                    <input type="checkbox" name="health" value="fitness"> Fitness
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="health" value="nutrition"> Nutrition
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="preference-category">
+                            <h4>Finance</h4>
+                            <div class="preference-options">
+                                <label class="preference-option">
+                                    <input type="checkbox" name="finance" value="stocks"> Stocks
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="finance" value="crypto"> Cryptocurrency
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="finance" value="banking"> Banking
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="preference-category">
+                            <h4>Education</h4>
+                            <div class="preference-options">
+                                <label class="preference-option">
+                                    <input type="checkbox" name="education" value="higher-education"> Higher Education
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="education" value="school-education"> School Education
+                                </label>
+                                <label class="preference-option">
+                                    <input type="checkbox" name="education" value="edtech"> EdTech
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="cancel-btn" onclick="closePreferencesModal()">Cancel</button>
+                        <button type="submit" class="save-btn">Save Preferences</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown-content">
+        <a href="#" id="recently-viewed">
+            <i class="fas fa-history"></i> Recently Viewed
+        </a>
+        <a href="#" id="saved-articles">
+            <i class="fas fa-bookmark"></i> Saved Articles
+            <span class="badge">0</span>
+        </a>
+        <a href="#" id="liked-articles">
+            <i class="fas fa-heart"></i> Liked Articles
+        </a>
+        <a href="#" id="edit-profile">
+            <i class="fas fa-user-edit"></i> Edit Profile
+        </a>
+        <a href="#" id="notifications">
+            <i class="fas fa-bell"></i> Notifications
+        </a>
+        <a href="#" id="theme-settings">
+            <i class="fas fa-palette"></i> Theme Settings
+        </a>
+        <a href="#" id="help">
+            <i class="fas fa-question-circle"></i> Help
+        </a>
+        <a href="#" id="feedback">
+            <i class="fas fa-comment-alt"></i> Feedback
+        </a>
+        <a href="#" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+
+    <script src="../js/profile.js"></script>
+</body>
+</html>
