@@ -1,0 +1,29 @@
+{
+  "name": "text-to-speech-assistant",
+  "version": "1.0.0",
+  "description": "A free text-to-speech AI assistant with multiple voice options and customization features",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "node-cache": "^5.1.2",
+    "node-espeak": "^1.0.6",
+    "audio-buffer-from": "^1.1.1",
+    "wav": "^1.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "jest": "^29.5.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+} 
