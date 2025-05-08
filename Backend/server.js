@@ -3,6 +3,8 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const connectDB = require('./config/database');
 require('dotenv').config();
+const fetch = require('node-fetch');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 // Import models
 const User = require('./models/User');
@@ -18,7 +20,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:5500', 'http://127.0.0.1:5500'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -487,6 +489,54 @@ app.get('/api/user/recently-viewed', authenticateToken, async (req, res) => {
         console.error('Error fetching recently viewed:', error);
         res.status(500).json({ error: 'Error fetching recently viewed' });
     }
+});
+
+const NEWS_API_KEY = process.env.NEWS_API_KEY || 'cad850f01c3841288162559ff80d9282';
+const NEWS_API_URL = `https://newsapi.org/v2/top-headlines?country=us&pageSize=50&apiKey=${NEWS_API_KEY}`;
+const CSV_PATH = process.env.CSV_PATH || 'latest_news.csv';
+
+async function fetchAndStoreNewsCSV() {
+    try {
+        const response = await fetch(NEWS_API_URL);
+        const data = await response.json();
+        if (!data.articles) {
+            console.error('No articles found in API response:', data);
+            return;
+        }
+
+        const now = new Date().toISOString();
+        const articles = data.articles.slice(0, 50).map(article => ({
+            title: (article.title || '').replace(/"/g, '""'),
+            description: (article.description || '').replace(/"/g, '""'),
+            fetched_at: now
+        }));
+
+        const csvWriter = createCsvWriter({
+            path: CSV_PATH,
+            header: [
+                {id: 'title', title: 'Title'},
+                {id: 'description', title: 'Description'},
+                {id: 'fetched_at', title: 'FetchedAt'}
+            ]
+        });
+
+        await csvWriter.writeRecords(articles);
+        console.log('CSV file written with latest 50 news articles.');
+    } catch (err) {
+        console.error('Error fetching or writing news CSV:', err);
+    }
+}
+
+// Call this function when the server starts
+fetchAndStoreNewsCSV();
+
+// Add this endpoint to allow downloading the latest news CSV file
+app.get('/download-latest-news', (req, res) => {
+    res.download(CSV_PATH, err => {
+        if (err) {
+            res.status(500).send('Could not download the file.');
+        }
+    });
 });
 
 const PORT = process.env.PORT || 5000;
